@@ -8,7 +8,7 @@ if (isset($_POST['register'])) {
     $cek_email = mysqli_query($conn, "SELECT email FROM users WHERE email='$email'");
     
     if (mysqli_num_rows($cek_email) > 0) {
-        echo "<script>alert('Email sudah terdaftar!'); window.location='register.php';</script>";
+        echo "<script>alert('Email sudah terdaftar!'); window.location='api/register.php';</script>";
     } else {
         $query = "INSERT INTO users (nama_lengkap, email, password) VALUES ('$nama', '$email', '$password')";
         

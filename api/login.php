@@ -11,9 +11,16 @@ if (isset($_POST['login'])) {
     if (mysqli_num_rows($result) === 1) {
         $row = mysqli_fetch_assoc($result);
         if (password_verify($password, $row['password'])) {
-            $_SESSION['login'] = true;
-            $_SESSION['nama'] = $row['nama_lengkap'];
-            header("Location: dashboard.php");
+             $_SESSION['login'] = true;
+             $_SESSION['id'] = $row['id'];
+             $_SESSION['nama'] = $row['nama_lengkap'];
+             $_SESSION['role'] = $row['role']; 
+
+            if ($row['role'] == 'admin') {
+                header("Location: admin_dashboard.php");
+            } else {
+                header("Location: dashboard.php");
+            }
             exit;
         }
     }
@@ -39,15 +46,15 @@ if (isset($_POST['login'])) {
 
             <form method="POST">
                 <div class="mb-3">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control" required>
-                </div>
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="email@contoh.com" required>
+            </div>
                 <div class="mb-3">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control" required>
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter" required>
                 </div>
                 <button type="submit" name="login" class="btn btn-success w-100">Masuk</button>
-                <p class="mt-3 text-center">Belum punya akun? <a href="register.php">Daftar di sini</a></p>
+                <p class="mt-3 text-center">Belum punya akun? <a href="api/register.php">Daftar di sini</a></p>
             </form>
         </div>
     </div>

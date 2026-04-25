@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'koneksi.php';
+include '../api/koneksi.php';
 
 if (isset($_POST['login'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -13,11 +13,18 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $row['password'])) {
             $_SESSION['login'] = true;
             $_SESSION['nama'] = $row['nama_lengkap'];
-            header("Location: dashboard.php");
+            $_SESSION['role'] = $row['role']; // Simpan role di session
+
+            // Arahkan berdasarkan role
+            if ($row['role'] == 'admin') {
+                header("Location: ../api/admin_dashboard.php");
+            } else {
+                header("Location: ../api/dashboard.php");
+            }
             exit;
         }
     }
-    header("Location: ../dashboard.php"); 
+    header("Location: ../api/login.php?error=1");
     exit;
 }
 ?>

@@ -31,19 +31,19 @@ if (isset($_POST['register'])) {
             <h2 class="text-center text-success fw-bold mb-4">Daftar Akun</h2>
             <form method="POST">
                 <div class="mb-3">
-                    <label>Nama Lengkap</label>
-                    <input type="text" name="nama" class="form-control" required>
-                </div>
+                <label class="form-label">Nama Lengkap</label>
+                <input type="text" name="nama" class="form-control" placeholder="Masukkan nama" required>
+            </div>
                 <div class="mb-3">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control" required>
-                </div>
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="email@contoh.com" required>
+            </div>
                 <div class="mb-3">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control" required>
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter" required>
                 </div>
                 <button type="submit" name="register" class="btn btn-success w-100">Daftar</button>
-                <p class="mt-3 text-center">Sudah punya akun? <a href="login.php">Login di sini</a></p>
+                <p class="mt-3 text-center">Sudah punya akun? <a href="api/login.php">Login di sini</a></p>
             </form>
         </div>
     </div>
