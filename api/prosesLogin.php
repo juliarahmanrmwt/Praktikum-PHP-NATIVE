@@ -3,10 +3,10 @@ session_start();
 include '../api/koneksi.php';
 
 if (isset($_POST['login'])) {
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $email = mysqli_real_escape_string($koneksi, $_POST['email']);
     $password = $_POST['password'];
 
-    $result = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
+    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE email='$email'");
     
     if ($result && mysqli_num_rows($result) === 1) {
         $row = mysqli_fetch_assoc($result);
