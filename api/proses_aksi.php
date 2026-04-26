@@ -2,7 +2,7 @@
 session_start();
 
 // 1. KOREKSI: Keluar Proses, Masuk Server untuk koneksi
-include '../api/koneksi.php'; 
+include 'koneksi.php'; 
 
 if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'admin') { 
     exit("Akses Ditolak"); 
