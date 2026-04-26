@@ -10,7 +10,7 @@ if (isset($_POST['register'])) {
     if (mysqli_num_rows($cek_email) > 0) {
         echo "<script>alert('Email sudah terdaftar!'); window.location='api/register.php';</script>";
     } else {
-        $query = "INSERT INTO users (nama_lengkap, email, password) VALUES ('$nama', '$email', '$password')";
+        $query = "INSERT INTO users (nama_lengkap, email, password) VALUES ('$nama', '$email', '$password', 'user')";
         
         if (mysqli_query($koneksi, $query)) {
             echo "<script>alert('Berhasil daftar! Silakan login.'); window.location='login.php';</script>";
