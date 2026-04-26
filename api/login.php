@@ -54,7 +54,7 @@ if (isset($_POST['login'])) {
                 <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter" required>
                 </div>
                 <button type="submit" name="login" class="btn btn-success w-100">Masuk</button>
-                <p class="mt-3 text-center">Belum punya akun? <a href="api/register.php">Daftar di sini</a></p>
+                <p class="mt-3 text-center">Belum punya akun? <a href="register.php">Daftar di sini</a></p>
             </form>
         </div>
     </div>
