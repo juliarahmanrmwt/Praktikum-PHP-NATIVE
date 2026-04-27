@@ -1,6 +1,8 @@
 <?php
+ob_start();
 session_start();
-include 'koneksi.php';
+
+include "koneksi.php";
 
 if (isset($_POST['login'])) {
     $email = mysqli_real_escape_string($koneksi, $_POST['email']);
@@ -17,14 +19,14 @@ if (isset($_POST['login'])) {
 
             // Arahkan berdasarkan role
             if ($row['role'] == 'admin') {
-                header("Location: ../api/admin_dashboard.php");
+                header("Location: admin_dashboard.php");
+                exit();
             } else {
-                header("Location: ../api/dashboard.php");
-            }
+                header("Location: dashboard.php");
             exit;
         }
+    } else {
+        $error_msg = "Username atau Password salah!";
     }
-    header("Location: ../api/login.php?error=1");
-    exit;
 }
-?>
+}

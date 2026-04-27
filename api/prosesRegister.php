@@ -1,5 +1,8 @@
 <?php
-include 'koneksi.php'; 
+ob_start();
+session_start();
+
+include "koneksi.php"; 
 
 if (isset($_POST['register'])) {
     $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
@@ -8,7 +11,7 @@ if (isset($_POST['register'])) {
     $cek_email = mysqli_query($koneksi, "SELECT email FROM users WHERE email='$email'");
     
     if (mysqli_num_rows($cek_email) > 0) {
-        echo "<script>alert('Email sudah terdaftar!'); window.location='api/register.php';</script>";
+        echo "<script>alert('Email sudah terdaftar!'); window.location='register.php';</script>";
     } else {
         $query = "INSERT INTO users (nama_lengkap, email, password) VALUES ('$nama', '$email', '$password', 'user')";
         

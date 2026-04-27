@@ -7,7 +7,7 @@ require_once __DIR__ . '/koneksi.php';
 // Sudah login → redirect langsung
 if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
     header("Location: " . ($_SESSION['role'] === 'admin' ? 'admin_dashboard.php' : 'dashboard.php'));
-    exit;
+exit;
 }
  
 // Tampilkan pesan timeout jika ada

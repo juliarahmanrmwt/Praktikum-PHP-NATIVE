@@ -43,7 +43,7 @@ if (isset($_POST['register'])) {
                 <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter" required>
                 </div>
                 <button type="submit" name="register" class="btn btn-success w-100">Daftar</button>
-                <p class="mt-3 text-center">Sudah punya akun? <a href="api/login.php">Login di sini</a></p>
+                <p class="mt-3 text-center">Sudah punya akun? <a href="login.php">Login di sini</a></p>
             </form>
         </div>
     </div>
