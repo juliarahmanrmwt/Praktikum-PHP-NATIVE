@@ -1,8 +1,6 @@
 <?php
-session_start();
-if (!isset($_SESSION['login'])) { header("Location: login.php"); exit; }
-
-include 'koneksi.php';
+require_once __DIR__ . '/auth_check.php'; 
+require_once __DIR__ . '/koneksi.php';
 $namaUser = $_SESSION['nama'];
 
 // Periksa apakah file BPS ada sebelum dipanggil

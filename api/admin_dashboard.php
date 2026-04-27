@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/auth_check.php';
 
 if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.php");

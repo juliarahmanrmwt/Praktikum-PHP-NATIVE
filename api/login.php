@@ -1,6 +1,8 @@
 <?php
-session_start();
-include 'koneksi.php';
+ini_set('session.save_path', '/tmp');
+if (session_status() === PHP_SESSION_NONE) session_start();
+ 
+require_once __DIR__ . '/koneksi.php';
 
 if (isset($_POST['login'])) {
     $email = mysqli_real_escape_string($koneksi, $_POST['email']);

@@ -1,5 +1,5 @@
 <?php
-session_start(); // HARUS ADA agar $_SESSION dikenali
+require_once __DIR__ . '/auth_check.php';
 include 'koneksi.php'; // HARUS ADA agar $conn dikenali
 
 if (!isset($_SESSION['login'])) {

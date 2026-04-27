@@ -1,6 +1,6 @@
 <?php
-session_start();
-// Pastikan pengecekan login sudah benar
+require_once __DIR__ . '/auth_check.php';
+
 if (!isset($_SESSION['login'])) { 
     header("Location: login.php"); 
     exit; 
