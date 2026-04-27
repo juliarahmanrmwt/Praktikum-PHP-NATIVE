@@ -20,7 +20,7 @@ if (isset($_SESSION['last_activity'])) {
         // Session kedaluwarsa → hancurkan dan redirect
         session_unset();
         session_destroy();
-        header("Location: /login?timeout=1");
+        header("Location: login.php?timeout=1");
         exit;
     }
 }
