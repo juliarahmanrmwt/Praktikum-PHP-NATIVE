@@ -6,16 +6,6 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once 'koneksi.php';
 
-// 1. CEK APAKAH SUDAH LOGIN
-// Jika sudah login, langsung lempar ke dashboard yang sesuai
-if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-    $target = ($_SESSION['role'] === 'admin') ? 'admin_dashboard.php' : 'dashboard.php';
-    header("Location: " . $target);
-    exit;
-}
-
-$error = '';
-
 // 2. PROSES LOGIN (Dijalankan saat tombol 'login' ditekan)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $email    = trim($_POST['email'] ?? '');
@@ -35,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             if ($result && mysqli_num_rows($result) === 1) {
                 $row = mysqli_fetch_assoc($result);
                 
-                // Verifikasi password (pastikan di database sudah di-hash pakai password_hash)
+                // Verifikasi password
                 if (password_verify($password, $row['password'])) {
                     
                     // Regenerate ID untuk keamanan session hijacking
@@ -47,13 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     $_SESSION['role']          = $row['role'];
                     $_SESSION['last_activity'] = time();
 
-                    // Redirect berdasarkan role
+                    // --- PERBAIKAN DI SINI ---
                     if ($row['role'] === 'admin') {
                         header("Location: admin_dashboard.php");
-                    } else {
+                    } else { // Menggunakan 'else' saja atau 'else if' yang benar
                         header("Location: dashboard.php");
                     }
                     exit;
+                    // -------------------------
                 } else {
                     $error = 'Password salah.';
                 }
