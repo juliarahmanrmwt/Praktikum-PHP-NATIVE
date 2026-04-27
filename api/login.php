@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     $_SESSION['role']          = $row['role'];
                     $_SESSION['last_activity'] = time();
  
-                    header("Location: " . ($row['role'] === 'admin' ? '/admin' : '/dashboard'));
+                    header("Location: " . ($_SESSION['role'] === 'admin' ? 'admin_dashboard.php' : 'dashboard.php'));
                     exit;
                 }
             }
