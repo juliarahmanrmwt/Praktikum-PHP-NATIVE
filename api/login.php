@@ -44,7 +44,7 @@ if (isset($_POST['login'])) {
                 <div class="alert alert-danger text-center">Email/Password Salah!</div>
             <?php endif; ?>
 
-            <form method="POST">
+            <form method="POST" action="api/proses_login.php">
                 <div class="mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" name="email" class="form-control" placeholder="email@contoh.com" required>
