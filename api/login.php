@@ -1,22 +1,22 @@
 <?php
-ini_set('session.save_path', '/tmp');
-if (session_status() === PHP_SESSION_NONE) session_start();
+// Pastikan tidak ada spasi sebelum tag <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-require_once __DIR__ . '/koneksi.php';
+require_once 'koneksi.php';
 
-// Sudah login → redirect langsung
+// 1. CEK APAKAH SUDAH LOGIN
+// Jika sudah login, langsung lempar ke dashboard yang sesuai
 if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-    header("Location: admin_dashboard.php");
-} else {
-    header("Location: dashboard.php");
-}    
-exit;
+    $target = ($_SESSION['role'] === 'admin') ? 'admin_dashboard.php' : 'dashboard.php';
+    header("Location: " . $target);
+    exit;
+}
 
-
-// Tampilkan pesan timeout jika ada
-$timeout_msg = isset($_GET['timeout']) ? 'Sesi kamu telah berakhir. Silakan login kembali.' : '';
 $error = '';
 
+// 2. PROSES LOGIN (Dijalankan saat tombol 'login' ditekan)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     if (empty($email) || empty($password)) {
         $error = 'Email dan password tidak boleh kosong.';
     } else {
+        // Gunakan Prepared Statement untuk keamanan dari SQL Injection
         $stmt = mysqli_prepare($koneksi, "SELECT id, nama_lengkap, password, role FROM users WHERE email = ? LIMIT 1");
         
         if ($stmt) {
@@ -34,27 +35,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             if ($result && mysqli_num_rows($result) === 1) {
                 $row = mysqli_fetch_assoc($result);
                 
+                // Verifikasi password (pastikan di database sudah di-hash pakai password_hash)
                 if (password_verify($password, $row['password'])) {
-                    // --- PERBAIKAN DI SINI ---
+                    
+                    // Regenerate ID untuk keamanan session hijacking
                     session_regenerate_id(true);
+                    
                     $_SESSION['login']         = true;
                     $_SESSION['id']            = $row['id'];
                     $_SESSION['nama']          = $row['nama_lengkap'];
                     $_SESSION['role']          = $row['role'];
                     $_SESSION['last_activity'] = time();
 
-                    // Redirect ke dashboard sesuai role
-                    $target = ($_SESSION['role'] === 'admin') ? 'admin_dashboard.php' : 'dashboard.php';
-                    header("Location: " . $target);
+                    // Redirect berdasarkan role
+                    if ($row['role'] === 'admin') {
+                        header("Location: admin_dashboard.php");
+                    } else {
+                        header("Location: dashboard.php");
+                    }
                     exit;
-                    // -------------------------
+                } else {
+                    $error = 'Password salah.';
                 }
+            } else {
+                $error = 'Email tidak terdaftar.';
             }
             mysqli_stmt_close($stmt);
+        } else {
+            $error = 'Terjadi kesalahan sistem.';
         }
-        $error = 'Email atau password salah.';
     }
 }
+
+// Tampilkan pesan timeout jika ada kiriman dari URL (?timeout=1)
+$timeout_msg = isset($_GET['timeout']) ? 'Sesi kamu telah berakhir. Silakan login kembali.' : '';
 ?>
 
 <!DOCTYPE html>
@@ -78,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                 <div class="alert alert-danger text-center small"><?= $error; ?></div>
             <?php endif; ?>
 
-            <form method="POST">
+            <form method="POST" action="">
                 <div class="mb-3">
                     <label class="form-label">Email</label>
                     <input type="email" name="email" class="form-control" placeholder="email@contoh.com" required>
