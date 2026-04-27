@@ -6,9 +6,12 @@ require_once __DIR__ . '/koneksi.php';
 
 // Sudah login → redirect langsung
 if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-    header("Location: " . ($_SESSION['role'] === 'admin' ? 'admin_dashboard.php' : 'dashboard.php'));
-    exit;
-}
+    header("Location: admin_dashboard.php");
+} else {
+    header("Location: dashboard.php");
+}    
+exit;
+
 
 // Tampilkan pesan timeout jika ada
 $timeout_msg = isset($_GET['timeout']) ? 'Sesi kamu telah berakhir. Silakan login kembali.' : '';
