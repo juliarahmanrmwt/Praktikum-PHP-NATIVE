@@ -73,7 +73,7 @@ $timeout_msg = isset($_GET['timeout']) ? 'Sesi kamu telah berakhir. Silakan logi
 <body class="bg-light">
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card shadow p-4" style="width: 400px;">
-            <h2 class="text-center text-success fw-bold mb-4">Login</h2>
+            <h2 href="dashboard.php" class="text-center text-success fw-bold mb-4">Login</h2>
             
             <?php if (!empty($timeout_msg)) : ?>
                 <div class="alert alert-warning text-center small"><?= $timeout_msg; ?></div>
@@ -92,7 +92,7 @@ $timeout_msg = isset($_GET['timeout']) ? 'Sesi kamu telah berakhir. Silakan logi
                     <label class="form-label">Password</label>
                     <input type="password" name="password" class="form-control" placeholder="Masukkan password" required>
                 </div>
-                <a href="dashboard.php" class="btn btn-success w-100">Masuk</a>
+                <button type="submit" name="login" class="btn btn-success w-100">Masuk</button>
                 <p class="mt-3 text-center">Belum punya akun? <a href="register.php" class="text-decoration-none">Daftar di sini</a></p>
             </form>
         </div>
