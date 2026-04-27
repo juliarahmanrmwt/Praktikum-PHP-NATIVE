@@ -4,7 +4,7 @@ require_once __DIR__ . '/koneksi.php';
 $namaUser = $_SESSION['nama'];
 
 // Periksa apakah file BPS ada sebelum dipanggil
-$fileBps = '../api/ambil_bps.php';
+$fileBps = __DIR__ . '/ambil_bps.php';
 if (file_exists($fileBps)) {
     include_once $fileBps;
     // Cek apakah fungsinya ada
