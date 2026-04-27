@@ -92,7 +92,7 @@ $timeout_msg = isset($_GET['timeout']) ? 'Sesi kamu telah berakhir. Silakan logi
                     <label class="form-label">Password</label>
                     <input type="password" name="password" class="form-control" placeholder="Masukkan password" required>
                 </div>
-                <button type="submit" name="login" class="btn btn-success w-100">Masuk</button>
+                <a href="dashboard.php" class="btn btn-success w-100">Masuk</a>
                 <p class="mt-3 text-center">Belum punya akun? <a href="register.php" class="text-decoration-none">Daftar di sini</a></p>
             </form>
         </div>
