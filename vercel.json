@@ -1,14 +1,17 @@
 {
-  "functions": {
-    "api/*.php": {
-      "runtime": "vercel-php@0.9.0"
-    }
-  },
-  "routes": [
-    { "src": "/api/proses_login", "dest": "/api/proses_login.php" },
-    { "src": "/api/login", "dest": "/api/login.php" },
-    { "src": "/beli",    "dest": "/api/beli.php" },
-    { "src": "/api-bps", "dest": "/api/api_bps.php" },
-    { "src": "/dashboard", "dest": "/api/dashboard.php" }
-  ]
+    "functions": {
+        "api/*.php": {
+            "runtime": "vercel-php@0.7.1"
+        }
+    },
+    "routes": [
+        {
+            "src": "/api/(.*).php",
+            "dest": "/api/$1.php"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/$1"
+        }
+    ]
 }
