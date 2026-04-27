@@ -6,7 +6,7 @@ require_once __DIR__ . '/koneksi.php';
  
 // Sudah login → redirect langsung
 if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-    header("Location: " . ($_SESSION['role'] === 'admin' ? '/admin' : '/dashboard'));
+    header("Location: " . ($_SESSION['role'] === 'admin' ? 'admin_dashboard.php' : 'dashboard.php'));
     exit;
 }
  
@@ -38,8 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     $_SESSION['nama']          = $row['nama_lengkap'];
                     $_SESSION['role']          = $row['role'];
                     $_SESSION['last_activity'] = time();
- 
-                    header("Location: " . ($_SESSION['role'] === 'admin' ? '/admin' : '/dashboard'));
+
                     exit;
                 }
             }
