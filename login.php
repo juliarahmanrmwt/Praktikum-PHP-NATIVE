@@ -1,10 +1,13 @@
 <?php
-// Pastikan tidak ada spasi sebelum tag <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+include 'koneksi.php';
 
-require_once 'koneksi.php';
+// LOGIKA LOGOUT (Menghapus Cookie)
+if(isset($_GET['logout'])) {
+    setcookie("nama_lengkap", "", time() - 3600, "/");
+    setcookie("role", "", time() - 3600, "/");
+    header("Location: logout.php");
+    exit;
+}
 
 // 2. PROSES LOGIN (Dijalankan saat tombol 'login' ditekan)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {

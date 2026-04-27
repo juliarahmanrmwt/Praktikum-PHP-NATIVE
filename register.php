@@ -1,6 +1,10 @@
 <?php
 include 'koneksi.php';
 
+$pesan = "";
+$tipe_pesan = "";
+
+
 if (isset($_POST['register'])) {
     $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
     $email = mysqli_real_escape_string($koneksi, $_POST['email']);
@@ -8,11 +12,16 @@ if (isset($_POST['register'])) {
 
     $cek_email = mysqli_query($koneksi, "SELECT email FROM users WHERE email='$email'");
     if (mysqli_num_rows($cek_email) > 0) {
-        echo "<script>alert('Email sudah terdaftar!');</script>";
+        $pesan = "Email sudah terdaftar! Gunakan email yang lain.";
+        $tipe_pesan = "eror";
     } else {
-        $query = "INSERT INTO users (nama_lengkap, email, password) VALUES ('$nama', '$email', '$password')";
+        $query = "INSERT INTO users (nama_lengkap, email, password, role) VALUES ('$nama', '$email', '$password', 'user')";
         if (mysqli_query($koneksi, $query)) {
-            echo "<script>alert('Berhasil daftar! Silakan login.'); window.location='login.php';</script>";
+            $pesan = "Pendaftaran Berhasil! Silahkan masuk.";
+            $tipe_pesan = "Sukses";
+        } else {
+            $pesan = "Terjadi kesalahan, gagal mendaftar!";
+            $tipe_pesan = "eror";
         }
     }
 }
@@ -43,7 +52,7 @@ if (isset($_POST['register'])) {
                 <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter" required>
                 </div>
                 <button type="submit" name="register" class="btn btn-success w-100">Daftar</button>
-                <p class="mt-3 text-center">Sudah punya akun? <a href="api/login.php">Login di sini</a></p>
+                <p class="mt-3 text-center">Sudah punya akun? <a href="login.php">Login di sini</a></p>
             </form>
         </div>
     </div>
