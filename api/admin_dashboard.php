@@ -8,13 +8,16 @@ if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'admin') {
 
 include 'koneksi.php';
 
-$resUser = mysqli_query($conn, "SELECT * FROM users");
+// Pastikan menggunakan variabel koneksi yang benar dari file koneksi.php
+$db = isset($koneksi) ? $koneksi : $conn;
+
+$resUser = mysqli_query($db, "SELECT * FROM users");
 $totalUser = ($resUser) ? mysqli_num_rows($resUser) : 0;
 
-$resSelesai = mysqli_query($conn, "SELECT * FROM pesanan WHERE status='Selesai'");
+$resSelesai = mysqli_query($db, "SELECT * FROM pesanan WHERE status='Selesai'");
 $pesananSelesai = ($resSelesai) ? mysqli_num_rows($resSelesai) : 0;
 
-$resPending = mysqli_query($conn, "SELECT * FROM pesanan WHERE status='Proses'");
+$resPending = mysqli_query($db, "SELECT * FROM pesanan WHERE status='Proses'");
 $pesananPending = ($resPending) ? mysqli_num_rows($resPending) : 0;
 ?>
 
@@ -29,10 +32,10 @@ $pesananPending = ($resPending) ? mysqli_num_rows($resPending) : 0;
     <style>
         :root { --primary-green: #198754; --dark-green: #146c43; }
         body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
-        .sidebar { min-height: 100vh; background: #212529; color: white; position: fixed; }
+        .sidebar { min-height: 100vh; background: #212529; color: white; position: fixed; z-index: 100; }
         .sidebar .nav-link { color: rgba(255,255,255,0.8); border-radius: 5px; margin: 5px 10px; transition: 0.3s; }
         .sidebar .nav-link:hover, .sidebar .nav-link.active { background: var(--primary-green); color: white; }
-        .main-content { margin-left: 16.666667%; padding: 30px; } /* Menyesuaikan posisi karena sidebar fixed */
+        .main-content { margin-left: 16.666667%; padding: 30px; }
         .card-stats { border: none; border-radius: 15px; transition: transform 0.3s; }
         .card-stats:hover { transform: translateY(-5px); }
         .table-container { background: white; border-radius: 15px; padding: 25px; margin-bottom: 30px; }
@@ -49,35 +52,29 @@ $pesananPending = ($resPending) ? mysqli_num_rows($resPending) : 0;
                 <small class="text-muted">Administrator</small>
             </div>
             <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link active" href="admin_dashboard.php"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#kelola-user"><i class="bi bi-people me-2"></i> Kelola User</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#kelola-pesanan"><i class="bi bi-cart-check me-2"></i> Kelola Pesanan</a>
-                </li>
+                <li class="nav-item"><a class="nav-link active" href="admin_dashboard.php"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#kelola-user"><i class="bi bi-people me-2"></i> Kelola User</a></li>
+                <li class="nav-item"><a class="nav-link" href="#kelola-pesanan"><i class="bi bi-cart-check me-2"></i> Kelola Pesanan</a></li>
                 <hr class="mx-3 text-secondary">
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i> Keluar</a>
-                </li>
+                <li class="nav-item"><a class="nav-link text-danger" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i> Keluar</a></li>
             </ul>
         </nav>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-            
             <?php if(isset($_GET['status'])): ?>
                 <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i>
                     <?php 
-                        if($_GET['status'] == 'sukses_tambah') echo "User baru berhasil ditambahkan!";
-                        if($_GET['status'] == 'sukses_edit') echo "Data user berhasil diperbarui!";
-                        if($_GET['status'] == 'sukses_hapus') echo "User telah berhasil dihapus!";
-                        if($_GET['status'] == 'pesanan_update') echo "Status pesanan telah diselesaikan!";
-                        if($_GET['status'] == 'pesanan_hapus') echo "Riwayat pesanan berhasil dihapus!";
+                        $msg = [
+                            'sukses_tambah' => "User baru berhasil ditambahkan!",
+                            'sukses_edit' => "Data user berhasil diperbarui!",
+                            'sukses_hapus' => "User telah berhasil dihapus!",
+                            'pesanan_update' => "Status pesanan telah diselesaikan!",
+                            'pesanan_hapus' => "Riwayat pesanan berhasil dihapus!"
+                        ];
+                        echo $msg[$_GET['status']] ?? "Aksi Berhasil!";
                     ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <?php endif; ?>
 
@@ -116,9 +113,7 @@ $pesananPending = ($resPending) ? mysqli_num_rows($resPending) : 0;
             <div class="table-container shadow-sm" id="kelola-user">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="fw-bold mb-0 text-success"><i class="bi bi-people-fill me-2"></i> Kelola User</h5>
-                    <a href="tambah_user.php" class="btn btn-success btn-sm px-3 rounded-pill">
-                        <i class="bi bi-plus-lg me-1"></i> Tambah User
-                    </a>
+                    <a href="tambah_user.php" class="btn btn-success btn-sm px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> Tambah User</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
@@ -132,7 +127,7 @@ $pesananPending = ($resPending) ? mysqli_num_rows($resPending) : 0;
                         </thead>
                         <tbody>
                             <?php
-                            $queryUser = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
+                            $queryUser = mysqli_query($db, "SELECT * FROM users ORDER BY id DESC");
                             while ($u = mysqli_fetch_assoc($queryUser)) :
                             ?>
                             <tr>
@@ -140,14 +135,8 @@ $pesananPending = ($resPending) ? mysqli_num_rows($resPending) : 0;
                                 <td><?= htmlspecialchars($u['email']); ?></td>
                                 <td><span class="badge bg-info text-dark"><?= ucfirst($u['role']); ?></span></td>
                                 <td class="text-center">
-                                    <a href="edit_user.php?id=<?= $u['id']; ?>" class="btn btn-outline-warning btn-sm me-1">
-                                        <i class="bi bi-pencil-square"></i> Edit
-                                    </a>
-                                    <a href="proses_aksi.php?hapus_user=<?= $u['id']; ?>" 
-                                       onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')" 
-                                       class="btn btn-outline-danger btn-sm">
-                                        <i class="bi bi-trash"></i> Hapus
-                                    </a>
+                                    <a href="edit_user.php?id=<?= $u['id']; ?>" class="btn btn-outline-warning btn-sm me-1"><i class="bi bi-pencil-square"></i></a>
+                                    <a href="proses_aksi.php?hapus_user=<?= $u['id']; ?>" onclick="return confirm('Hapus user ini?')" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></a>
                                 </td>
                             </tr>
                             <?php endwhile; ?>
@@ -170,43 +159,38 @@ $pesananPending = ($resPending) ? mysqli_num_rows($resPending) : 0;
                             </tr>
                         </thead>
                         <tbody>
-    <?php
-    // Ambil data dari tabel pesanan
-    $queryPesanan = mysqli_query($conn, "SELECT * FROM pesanan ORDER BY id_pesanan DESC");
+                            <?php
+                            $queryPesanan = mysqli_query($db, "SELECT * FROM pesanan ORDER BY id_pesanan DESC");
+                            if (!$queryPesanan) {
+                                echo "<tr><td colspan='5' class='text-center text-danger'>Error: " . mysqli_error($db) . "</td></tr>";
+                            } else {
+                                while ($p = mysqli_fetch_assoc($queryPesanan)) :
+                            ?>
+                            <tr>
+                                <td class="fw-bold text-primary">#ORD-<?= $p['id_pesanan']; ?></td>
+                                <td><?= htmlspecialchars($p['nama_pembeli'] ?? 'Pelanggan'); ?></td>
+                                <td><?= htmlspecialchars($p['nama_produk']); ?></td>
+                                <td>
+                                    <span class="badge <?= ($p['status'] == 'Proses') ? 'bg-warning text-dark' : 'bg-success' ?>">
+                                        <i class="bi <?= ($p['status'] == 'Proses') ? 'bi-hourglass-split' : 'bi-check-all' ?> me-1"></i> <?= $p['status']; ?>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <?php if($p['status'] == 'Proses') : ?>
+                                        <a href="proses_aksi.php?selesai_pesanan=<?= $p['id_pesanan']; ?>" class="btn btn-success btn-sm me-1">Selesaikan</a>
+                                    <?php endif; ?>
+                                    <a href="proses_aksi.php?hapus_pesanan=<?= $p['id_pesanan']; ?>" onclick="return confirm('Hapus riwayat?')" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></a>
+                                </td>
+                            </tr>
+                            <?php endwhile; } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
 
-    // CEK: Jika query gagal, tampilkan pesan error SQL-nya agar kita tahu apa yang salah
-    if (!$queryPesanan) {
-        echo "<tr><td colspan='5' class='text-center text-danger'>Error Query: " . mysqli_error($conn) . "</td></tr>";
-    } else {
-        // Jika query berhasil, baru jalankan loop
-        while ($p = mysqli_fetch_assoc($queryPesanan)) :
-    ?>
-    <tr>
-        <td class="fw-bold text-primary">#ORD-<?= $p['id_pesanan']; ?></td>
-        <td><?= $p['nama_pembeli'] ?? 'Pelanggan'; ?></td>
-        <td><?= $p['nama_produk']; ?></td>
-        <td>
-            <?php if($p['status'] == 'Proses') : ?>
-                <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i> Proses</span>
-            <?php else : ?>
-                <span class="badge bg-success"><i class="bi bi-check-all me-1"></i> Selesai</span>
-            <?php endif; ?>
-        </td>
-        <td class="text-center">
-            <?php if($p['status'] == 'Proses') : ?>
-                <a href="proses_aksi.php?selesai_pesanan=<?= $p['id_pesanan']; ?>" 
-                   class="btn btn-success btn-sm me-1">Selesaikan</a>
-            <?php endif; ?>
-            
-            <a href="proses_aksi.php?hapus_pesanan=<?= $p['id_pesanan']; ?>" 
-               onclick="return confirm('Hapus riwayat pesanan ini?')" 
-               class="btn btn-outline-danger btn-sm">
-                <i class="bi bi-trash"></i>
-            </a>
-        </td>
-    </tr>
-    <?php 
-        endwhile; 
-    } // Penutup else
-    ?>
-</tbody>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

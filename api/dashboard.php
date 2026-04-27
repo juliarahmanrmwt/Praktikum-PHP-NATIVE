@@ -1,6 +1,7 @@
 <?php
-require_once __DIR__ . '/auth_check.php'; 
+require_once __DIR__ . '/auth_check.php';
 require_once __DIR__ . '/koneksi.php';
+
 $namaUser = $_SESSION['nama'];
 
 // Periksa apakah file BPS ada sebelum dipanggil
@@ -23,16 +24,10 @@ if (file_exists($fileBps)) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
-        .product-card:hover {
-            transform: translateY(-5px);
-            transition: 0.3s;
-        }
-        .bps-indicator {
-            font-size: 0.75rem;
-            padding: 2px 10px;
-            border-radius: 50px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        .product-card:hover { transform: translateY(-5px); transition: 0.3s; }
+        .bps-indicator { 
+            font-size: 0.75rem; padding: 2px 10px; border-radius: 50px; 
+            background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); 
         }
     </style>
 </head>
@@ -46,23 +41,18 @@ if (file_exists($fileBps)) {
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="dashboard.php">Home</a></li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="dashboard.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="api_bps.php">
-                            <i class="bi bi-table"></i> Statistik BPS
-                        </a>
+                        <a class="nav-link" href="api_bps.php"><i class="bi bi-table"></i> Statistik BPS</a>
                     </li>
                 </ul>
                 
                 <div class="ms-auto d-flex align-items-center">
                     <div class="bps-indicator text-white me-3 d-none d-md-block">
                         <i class="bi bi-broadcast"></i> API BPS: 
-                        <?php echo $statusBPS ? "<span class='text-warning fw-bold'>Online</span>" : "<span class='text-light opacity-75'>Offline</span>"; ?>
+                        <?= $statusBPS ? "<span class='text-warning fw-bold'>Online</span>" : "<span class='text-light opacity-75'>Offline</span>"; ?>
                     </div>
-
-                    <span class="text-white me-3 d-none d-lg-inline">Halo, <strong><?php echo $namaUser; ?></strong>!</span>
+                    <span class="text-white me-3 d-none d-lg-inline">Halo, <strong><?= htmlspecialchars($namaUser); ?></strong>!</span>
                     <a href="logout.php" class="btn btn-outline-light btn-sm rounded-pill">Keluar</a>
                 </div>
             </div>
@@ -72,7 +62,7 @@ if (file_exists($fileBps)) {
     <header class="bg-success-subtle py-5 text-center">
         <div class="container">
             <h1 class="display-5 fw-bold text-success">Pasar Tani Digital</h1>
-            <p class="lead">Produk segar langsung dari tangan petani lokal untuk <strong><?php echo $namaUser; ?></strong>.</p>
+            <p class="lead">Produk segar langsung dari tangan petani lokal untuk <strong><?= htmlspecialchars($namaUser); ?></strong>.</p>
         </div>
     </header>
         
@@ -80,8 +70,7 @@ if (file_exists($fileBps)) {
         <div class="row g-4">
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card h-100 border-0 shadow-sm product-card">
-                    <img src="https://sukamenak-cikeusal.desa.id/wp-content/uploads/2023/08/62bb1bb0b7595.jpg" 
-                    class="card-img-top" alt="Cabai Merah Segar" style="height: 200px; object-fit: cover;">
+                    <img src="https://sukamenak-cikeusal.desa.id/wp-content/uploads/2023/08/62bb1bb0b7595.jpg" class="card-img-top" alt="Cabai" style="height: 200px; object-fit: cover;">
                     <div class="card-body d-flex flex-column">
                         <small class="text-success fw-bold text-uppercase">Bumbu</small>
                         <h5 class="card-title">Cabai Merah Segar</h5>
@@ -94,11 +83,9 @@ if (file_exists($fileBps)) {
                     </div>
                 </div>
             </div>
-
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card h-100 border-0 shadow-sm product-card">
-                    <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=500&q=80" 
-                         class="card-img-top" alt="Tomat" style="height: 200px; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Tomat" style="height: 200px; object-fit: cover;">
                     <div class="card-body d-flex flex-column">
                         <small class="text-success fw-bold text-uppercase">Sayuran</small>
                         <h5 class="card-title">Tomat Merah</h5>
@@ -111,41 +98,7 @@ if (file_exists($fileBps)) {
                     </div>
                 </div>
             </div>
-
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card h-100 border-0 shadow-sm product-card">
-                    <img src="https://images.pexels.com/photos/2329440/pexels-photo-2329440.jpeg?auto=compress&cs=tinysrgb&w=400" 
-                         class="card-img-top" alt="Timun Segar" style="height: 200px; object-fit: cover;">
-                    <div class="card-body d-flex flex-column">
-                        <small class="text-success fw-bold text-uppercase">Sayuran</small>
-                        <h5 class="card-title">Timun Segar</h5>
-                        <p class="card-text text-danger fw-bold">Rp 15.000</p>
-                        <form action="beli.php" method="POST" class="mt-auto">
-                            <input type="hidden" name="nama_produk" value="Timun Segar">
-                            <input type="hidden" name="harga" value="15000">
-                            <button type="submit" name="proses_beli" class="btn btn-success w-100 rounded-pill">Beli Sekarang</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card h-100 border-0 shadow-sm product-card">
-                    <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8a2VudGFuZ3xlbnwwfHwwfHx8MA%3D%3D" 
-                         class="card-img-top" alt="Kentang" style="height: 200px; object-fit: cover;">
-                    <div class="card-body d-flex flex-column">
-                        <small class="text-success fw-bold text-uppercase">Sayuran</small>
-                        <h5 class="card-title">Kentang Dieng</h5>
-                        <p class="card-text text-danger fw-bold">Rp 20.000</p>
-                        <form action="beli.php" method="POST" class="mt-auto">
-                            <input type="hidden" name="nama_produk" value="Kentang Dieng">
-                            <input type="hidden" name="harga" value="20000">
-                            <button type="submit" name="proses_beli" class="btn btn-success w-100 rounded-pill">Beli Sekarang</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div> 
+            </div> 
     </main>
 
     <footer class="text-center py-4 text-muted border-top">
